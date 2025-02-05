@@ -1,0 +1,17 @@
+[project]
+name = "multi-agent-thing"
+version = "0.1.0"
+description = "A multi-agent system for finding longest words in web content"
+requires-python = ">=3.8"
+dependencies = [
+    "markdownify>=0.11.6",
+    "requests>=2.31.0",
+    "smolagents",
+    "numpy>=1.24.0",
+    "pandas>=2.1.0",
+    "litellm>=0.1.0",
+]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"

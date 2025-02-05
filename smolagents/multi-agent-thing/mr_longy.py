@@ -1,3 +1,4 @@
+import os
 import markdownify
 from requests import RequestException
 import requests
@@ -10,8 +11,8 @@ from smolagents import (
     LiteLLMModel,
 )
 
-model_id = "Qwen/Qwen2.5-Coder-32B-Instruct"
-model = HfApiModel(model_id)
+model_id = "openrouter/anthropic/claude-3.5-sonnet:beta"
+model = LiteLLMModel(model_id)
 
 @tool
 def visit_webpage(url: str) -> str:
@@ -41,27 +42,15 @@ def visit_webpage(url: str) -> str:
     except Exception as e:
         return f"An unexpected error occurred: {str(e)}"
 
-web_agent = ToolCallingAgent(
-    tools=[DuckDuckGoSearchTool(), visit_webpage],
-    model=model,
-    max_steps=10,
-    name="search",
-    description="Runs web searches for you. Give it your query as an argument.",
-)
-
-longest_word_finder = CodeAgent(
-    tools=[],
-    model=model,
-    name="tod",
-    description="Finds the longest word in a given text.",
-)
 
 manager_agent = CodeAgent(
-    tools=[],
+    tools=[DuckDuckGoSearchTool()],
     model=model,
-    managed_agents=[web_agent, longest_word_finder],
-    additional_authorized_imports=["time", "numpy", "pandas"],
+    managed_agents=[],
+    additional_authorized_imports=["time", "numpy", "pandas", "requests"],
 )
 
 
-answer = manager_agent.run("Find the longest word on the Wikipedia page about cheetahs.")
+answer = manager_agent.run("Find the longest word on a random website.")
+
+print(answer)
